@@ -11,6 +11,8 @@ def self_info():
     my_info = requests.get(requests_url).json()
     print "Requesting url:" + requests_url
     print my_info
+    print my_info['data']['bio']
+    print my_info['data']['counts']['followed_by']
 
 
 self_info()
