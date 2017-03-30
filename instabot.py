@@ -42,9 +42,62 @@ def get_user_by_username():
 def operations(user_id):
     requests_url = (BASE_URL + 'users/%s/media/recent/?access_token=%s') % (user_id, APP_ACCESS_TOKEN)
     recent_posts =requests.get(requests_url).json()
-
+    post_list = []
     for likes in recent_posts['data']:
-            print "Post id: " + str(likes['id']) + " likes :" + str(likes['likes']['count'])
+            post_list.append(likes['id'])
+            print "User_id : " + str(user_id) + " Post id: " + str(likes['id']) + " likes :" + str(likes['likes']['count'])
+    post_id = raw_input("Enter Post Id you wan't to access or B to go back : ")
+    if post_id not in post_list:
+        if post_id == "b" or "B":
+            get_user_by_username()
+        else:
+            print "Invalid Post id !"
+            operations(user_id)
+    else:
+        select_operation(user_id ,post_id)
+
+#--------------------------------------------------------------------------------------------------------------------
+
+def select_operation(user_id , post_id):
+    opr = raw_input("Enter L to like a Post OR C to comment on a Post OR b to go back : ").upper()
+    if opr == "l":
+        like_post(user_id , post_id)
+    elif opr == "c":
+        comment_post(user_id , post_id)
+    elif opr == "b":
+        operations(user_id)
+
+
+
+#--------------------------------------------------------------------------------------------------------------------
+def like_post(uid , post_id):
+    payload = {'access_token':APP_ACCESS_TOKEN}
+    requests_url = (BASE_URL + 'media/%s/likes' % (post_id))
+    response_to_like = requests.post(requests_url, payload).json()
+
+    if len(response_to_like):
+        print "You ve' successfully liked that post !"
+        operations(uid)
+
+    else:
+        print "Failed to like this Post !"
+        operations(uid)
+
+#----------------------------------------------------------------------------------------------------------------------
+def comment_post(uid , post_id):
+    comment = raw_input("Comment here")
+    payload = {'access_token': APP_ACCESS_TOKEN , 'text':comment}
+    requests_url = (BASE_URL + 'media/%s/comments' % (post_id))
+    response_to_comments = requests.post(requests_url, payload).json()
+
+    if len(response_to_comments):
+        print "You ve' successfully commented on that post !"
+        operations(uid)
+
+    else:
+        print "Failed to comment on this Post !"
+        operations(uid)
+
 
 
 get_user_by_username()
