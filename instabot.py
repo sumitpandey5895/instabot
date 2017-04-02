@@ -4,8 +4,8 @@ APP_ACCESS_TOKEN = "2096873226.ed76845.d26be842838e497097d368aff4ed72ac"
 
 BASE_URL = "https://api.instagram.com/v1/"
 
-data = requests.get("http://facebook.com")
 
+#_____________________________________________________________________________________________
 def self_info():
     requests_url = (BASE_URL + 'users/self/?access_token=%s') % (APP_ACCESS_TOKEN)
     my_info = requests.get(requests_url).json()
@@ -14,10 +14,10 @@ def self_info():
     print my_info['data']['bio']
     print my_info['data']['counts']['followed_by']
 
-#------------------------------------------------------------------------------------
 
+#_____________________________________________________________________________________________
 def get_user_by_username():
-    user_list = ["singhsudanshu"]
+    user_list = ["singhsudanshu","shubham.is.here"]
     user_name = raw_input("Enter Username you wants to search or Q to quit : ")
     if user_name not in user_list:
         if user_name == "q" or user_name == "Q":
@@ -38,7 +38,7 @@ def get_user_by_username():
         else:
             get_user_by_username()
 
-#-------------------------------------------------------------------------------------------------------------------
+#_____________________________________________________________________________________________
 def operations(user_id):
     requests_url = (BASE_URL + 'users/%s/media/recent/?access_token=%s') % (user_id, APP_ACCESS_TOKEN)
     recent_posts =requests.get(requests_url).json()
@@ -56,20 +56,19 @@ def operations(user_id):
     else:
         select_operation(user_id ,post_id)
 
-#--------------------------------------------------------------------------------------------------------------------
-
+#_____________________________________________________________________________________________
 def select_operation(user_id , post_id):
     opr = raw_input("Enter L to like a Post OR C to comment on a Post OR b to go back : ").upper()
-    if opr == "l":
+    if opr == "L":
         like_post(user_id , post_id)
-    elif opr == "c":
+    elif opr == "C":
         comment_post(user_id , post_id)
     elif opr == "b":
         operations(user_id)
 
 
 
-#--------------------------------------------------------------------------------------------------------------------
+#_____________________________________________________________________________________________
 def like_post(uid , post_id):
     payload = {'access_token':APP_ACCESS_TOKEN}
     requests_url = (BASE_URL + 'media/%s/likes' % (post_id))
@@ -83,9 +82,9 @@ def like_post(uid , post_id):
         print "Failed to like this Post !"
         operations(uid)
 
-#----------------------------------------------------------------------------------------------------------------------
+#_____________________________________________________________________________________________
 def comment_post(uid , post_id):
-    comment = raw_input("Comment here")
+    comment = raw_input("Comment here : ")
     payload = {'access_token': APP_ACCESS_TOKEN , 'text':comment}
     requests_url = (BASE_URL + 'media/%s/comments' % (post_id))
     response_to_comments = requests.post(requests_url, payload).json()
@@ -97,6 +96,7 @@ def comment_post(uid , post_id):
     else:
         print "Failed to comment on this Post !"
         operations(uid)
+
 
 
 
