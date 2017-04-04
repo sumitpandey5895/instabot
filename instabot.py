@@ -79,7 +79,7 @@ def operations(user_id):
 #_____________________________________________________________________________________________
 #This function helps user to select the desired operation
 def select_operation(user_id , post_id):
-    opr = raw_input("Enter L to like a Post \n  OR C to comment on a Post \n  OR D to Delete last comment \n  OR B to go back : ").upper()
+    opr = raw_input("Enter L to like a Post \n  OR C to comment on a Post \n  OR D to Delete comment \n  OR A to find average number of words per comment \n  OR B to go back : ").upper()
     if opr == "L":
         like_post(user_id , post_id)
     elif opr == "C":
@@ -211,22 +211,26 @@ def Average_number_of_words(user_id , post_id):
     fetch = requests.get(requests_url).json()
     c = 1
     av = 0
+    if len(fetch['data']) > 0:
 
-    for comments in fetch['data']:
-        if len(comments['text']):
-            print "comment id : " + str(c) + " " + "text : " + str(comments['text'])
-            x1 = comments['text'].split()
-            k = 0
-            for i in x1:
-                k = k +1
-            av = av + k
+        for comments in fetch['data']:
+            if len(comments['text']):
+                print "comment id : " + str(c) + " " + "text : " + str(comments['text'])
+                x1 = comments['text'].split()
+                k = 0
+                for i in x1:
+                    k = k +1
+                av = av + k
 
-        c = c + 1
-    total_words = av
-    total_comments = c - 1
-    Average = total_words / total_comments
-    print "Average number of words per comment is : " + str( Average)
-    operations(user_id)
+            c = c + 1
+        total_words = av
+        total_comments = c - 1
+        Average = total_words / total_comments
+        print "Average number of words per comment is : " + str( Average)
+        operations(user_id)
+    else:
+        print "No comments found !"
+        operations(user_id)
 
 
 
