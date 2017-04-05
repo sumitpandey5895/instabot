@@ -19,6 +19,7 @@ def self_info():
     requests_url = (BASE_URL + 'users/self/?access_token=%s') % (APP_ACCESS_TOKEN) # this is a URL requesting to fetch users information
     my_info = requests.get(requests_url).json() #This is json response recieved from the instagram API
 
+
     print "Name :" + str(my_info['data']['full_name'])
     print "Bio :" + str(my_info['data']['bio'])
     print "Followers :" + str(my_info['data']['counts']['followed_by'])
@@ -194,7 +195,7 @@ def delete_comment_manually(user_id,post_id):
     requests_url2 = (BASE_URL + 'media/%s/comments/%s?access_token=%s' % (post_id, x , APP_ACCESS_TOKEN))
     response = requests.delete(requests_url2).json()
 
-    if len(response['meta']['code']) == "200":
+    if response['meta']['code']== "200":
         print "comment successfully deleted !"
         delete_comment_manually(user_id, post_id)
 
