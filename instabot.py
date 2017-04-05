@@ -195,7 +195,7 @@ def delete_comment_manually(user_id,post_id):
     requests_url2 = (BASE_URL + 'media/%s/comments/%s?access_token=%s' % (post_id, x , APP_ACCESS_TOKEN))
     response = requests.delete(requests_url2).json()
 
-    if response['meta']['code']== "200":
+    if response['data'] == None:
         print "comment successfully deleted !"
         delete_comment_manually(user_id, post_id)
 
